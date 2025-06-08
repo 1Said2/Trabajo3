@@ -173,7 +173,8 @@ def generar_matriz_espiral(matriz):
 def contar_nodos_hoja_recursivo(raiz):
     if raiz is None or (raiz.izquierdo is None and raiz.derecho is None):
         return 0 if raiz is None else 1
-    return contar_nodos_hoja_recursivo(raiz.izquierdo) + contar_nodos_hoja_recursivo(raiz.derecho)
+    else:
+        return contar_nodos_hoja_recursivo(raiz.izquierdo) + contar_nodos_hoja_recursivo(raiz.derecho)
 
 
 ## Clases para el programa
