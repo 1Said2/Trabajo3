@@ -132,7 +132,7 @@ def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
             else:
                 return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
 
-#Ejercicio 7: Rellenar la matriz en espiral
+## Ejercicio 7: Rellenar la matriz en espiral
 def generar_matriz_espiral(matriz):
     m = len(matriz)     # Filas de la matriz
     n = len(matriz[0])  # Columnas de la matriz
@@ -169,7 +169,30 @@ def generar_matriz_espiral(matriz):
 
     return matriz
 
-#Ejercicio 9: Contar el número de nodos hoja en un árbol
+
+## Ejercicio 8: Recorrido preorden arbol binario
+def recorrido_preorden_sec(raiz):
+    if not raiz:
+        return []
+    resultado = []
+    pila = [raiz]
+    while pila:
+        nodo_actual = pila.pop()
+        resultado.append(nodo_actual.valor)
+        if nodo_actual.derecho:
+            pila.append(nodo_actual.derecho)
+        if nodo_actual.izquierdo:
+            pila.append(nodo_actual.izquierdo)
+    return resultado
+
+
+def recorrido_preorden_rec(raiz):
+    if not raiz:
+        return []
+    return [raiz.valor] + recorrido_preorden_rec(raiz.izquierdo) + recorrido_preorden_rec(raiz.derecho)
+
+
+## Ejercicio 9: Contar el número de nodos hoja en un árbol
 def contar_nodos_hoja_recursivo(raiz):
     if raiz is None or (raiz.izquierdo is None and raiz.derecho is None):
         return 0 if raiz is None else 1
@@ -247,6 +270,7 @@ def menu():
         print("5. Suma de filas impares de matriz")
         print("6. Relleno matriz serpiente diagonal inversa")
         print("7. Rellenar matriz en espiral")
+        print("8. Recorrido preorden de árbol binario")
         print("9. Calcular el número de nodos hoja en un árbol binario")
         print("0. Salir")
 
@@ -303,6 +327,13 @@ def menu():
             print("\nMatriz generada en espiral:")
             for fila in matriz_espiral:
                 print(fila)
+        elif opcion == "8":
+            arbol = generar_arbol_aleatorio(4)
+            print("Árbol generado (visualización):")
+            imprimir_arbol(arbol)
+            print("Recorrido Secuencial:\t" + str(recorrido_preorden_sec(arbol)))
+            print("Recorrido Recursivo:\t" + str(recorrido_preorden_rec(arbol)))
+
         elif opcion == "9":
             # Generar árbol aleatorio con profundidad máxima 4
             profundidad = 4
