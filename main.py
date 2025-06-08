@@ -169,6 +169,20 @@ def generar_matriz_espiral(matriz):
 
     return matriz
 
+#Ejercicio 9: Contar el número de nodos hoja en un árbol
+def contar_nodos_hoja_recursivo(raiz):
+    if raiz is None or (raiz.izquierdo is None and raiz.derecho is None):
+        return 0 if raiz is None else 1
+    return contar_nodos_hoja_recursivo(raiz.izquierdo) + contar_nodos_hoja_recursivo(raiz.derecho)
+
+
+## Clases para el programa
+class Nodo:
+    def __init__(self, valor):
+        self.valor = valor
+        self.izquierdo = None
+        self.derecho = None
+
 ## Generación de estructuras de datos
 def generar_arreglo(n):
     return [random.randint(1, 100) for _ in range(n)]
@@ -193,6 +207,35 @@ def generar_matriz(m, n):
     return [[0] * n for _ in range(m)]
 
 
+def generar_arbol_aleatorio(profundidad_maxima, probabilidad_rama=0.7):
+    if profundidad_maxima == 0 or random.random() > probabilidad_rama:
+        return None
+
+    valor = random.randint(1, 100)  # Valores entre 1 y 100
+    nodo = Nodo(valor)
+    nodo.izquierdo = generar_arbol_aleatorio(profundidad_maxima - 1, probabilidad_rama)
+    nodo.derecho = generar_arbol_aleatorio(profundidad_maxima - 1, probabilidad_rama)
+
+    return nodo
+
+def imprimir_arbol(raiz, espacio=0, nivel=0):
+    if raiz is None:
+        return
+
+    espacio += 5
+
+    # Primero el hijo derecho
+    imprimir_arbol(raiz.derecho, espacio, nivel + 1)
+
+    # Imprimir el nodo actual
+    print()
+    for _ in range(5, espacio):
+        print(" ", end="")
+    print(f"{raiz.valor}({nivel})")
+
+    # Luego el hijo izquierdo
+    imprimir_arbol(raiz.izquierdo, espacio, nivel + 1)
+
 ## Menú principal
 def menu():
     while True:
@@ -203,6 +246,7 @@ def menu():
         print("5. Suma de filas impares de matriz")
         print("6. Relleno matriz serpiente diagonal inversa")
         print("7. Rellenar matriz en espiral")
+        print("9. Calcular el número de nodos hoja en un árbol binario")
         print("0. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -258,6 +302,21 @@ def menu():
             print("\nMatriz generada en espiral:")
             for fila in matriz_espiral:
                 print(fila)
+        elif opcion == "9":
+            # Generar árbol aleatorio con profundidad máxima 4
+            profundidad = 4
+            arbol = generar_arbol_aleatorio(profundidad)
+
+            print("Árbol generado (visualización):")
+            imprimir_arbol(arbol)
+
+            hojas = contar_nodos_hoja_recursivo(arbol)
+            print(f"\nEl árbol tiene {hojas} nodos hoja")
+
+            # Mostrar algunos detalles adicionales
+            print(f"\nDetalles del árbol generado:")
+            print(f"- Profundidad máxima configurada: {profundidad}")
+            print(f"- Nodos hoja encontrados: {hojas}")
         else:
             print("Opción no válida. Intente nuevamente.")
 
