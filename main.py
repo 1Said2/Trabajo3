@@ -242,23 +242,42 @@ def generar_arbol_aleatorio(profundidad_maxima, probabilidad_rama=0.7):
 
     return nodo
 
-def imprimir_arbol(raiz, espacio=0, nivel=0):
-    if raiz is None:
-        return
 
-    espacio += 5
+def imprimir_arbol(raiz):
+    def imprimir_rec(nodo, prefijo="", es_ultimo=True, nivel=0):
+        if nodo is not None:
+            # Mostrar nodo con nivel en formato compacto [N]
+            print(prefijo + ("└── " if es_ultimo else "├── ") + f"{nodo.valor} [{nivel}]")
 
-    # Primero el hijo derecho
-    imprimir_arbol(raiz.derecho, espacio, nivel + 1)
+            # Preparar prefijo para hijos
+            extension = "    " if es_ultimo else "│   "
+            nuevo_prefijo = prefijo + extension
 
-    # Imprimir el nodo actual
-    print()
-    for _ in range(5, espacio):
-        print(" ", end="")
-    print(f"{raiz.valor}({nivel})")
+            # Determinar si hay hijos
+            tiene_izq = nodo.izquierdo is not None
+            tiene_der = nodo.derecho is not None
 
-    # Luego el hijo izquierdo
-    imprimir_arbol(raiz.izquierdo, espacio, nivel + 1)
+            # Imprimir hijos con nivel incrementado
+            if tiene_izq and tiene_der:
+                imprimir_rec(nodo.izquierdo, nuevo_prefijo, False, nivel + 1)
+                imprimir_rec(nodo.derecho, nuevo_prefijo, True, nivel + 1)
+            elif tiene_izq:
+                imprimir_rec(nodo.izquierdo, nuevo_prefijo, True, nivel + 1)
+            elif tiene_der:
+                imprimir_rec(nodo.derecho, nuevo_prefijo, True, nivel + 1)
+
+    if raiz:
+        print(f"{raiz.valor} [0]")  # Raíz en nivel 0
+        if raiz.izquierdo or raiz.derecho:
+            if raiz.izquierdo and raiz.derecho:
+                imprimir_rec(raiz.izquierdo, "", False, 1)
+                imprimir_rec(raiz.derecho, "", True, 1)
+            elif raiz.izquierdo:
+                imprimir_rec(raiz.izquierdo, "", True, 1)
+            elif raiz.derecho:
+                imprimir_rec(raiz.derecho, "", True, 1)
+    else:
+        print("Árbol vacío")
 
 ## Menú principal
 def menu():
