@@ -132,6 +132,42 @@ def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
             else:
                 return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
 
+#Ejercicio 7: Rellenar la matriz en espiral
+def generar_matriz_espiral(matriz):
+    m = len(matriz)     # Filas de la matriz
+    n = len(matriz[0])  # Columnas de la matriz
+    num = 1
+    top, bottom = 0, m - 1
+    left, right = 0, n - 1
+
+    while num <= m * n:
+        for col in range(right, left - 1, -1):
+            matriz[bottom][col] = num
+            num += 1
+        bottom -= 1
+        if num > m * n:
+            break
+
+        for row in range(bottom, top - 1, -1):
+            matriz[row][left] = num
+            num += 1
+        left += 1
+        if num > m * n:
+            break
+
+        for col in range(left, right + 1):
+            matriz[top][col] = num
+            num += 1
+        top += 1
+        if num > m * n:
+            break
+
+        for row in range(top, bottom + 1):
+            matriz[row][right] = num
+            num += 1
+        right -= 1
+
+    return matriz
 
 ## Generación de estructuras de datos
 def generar_arreglo(n):
@@ -153,6 +189,9 @@ def generar_matriz_cuadrada(n, simetrica=False):
                 matriz[i][j] = matriz[j][i]
         return matriz
 
+def generar_matriz(m, n):
+    return [[0] * n for _ in range(m)]
+
 
 ## Menú principal
 def menu():
@@ -163,6 +202,7 @@ def menu():
         print("4. Verificar matriz simétrica")
         print("5. Suma de filas impares de matriz")
         print("6. Relleno matriz serpiente diagonal inversa")
+        print("7. Rellenar matriz en espiral")
         print("0. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -209,6 +249,14 @@ def menu():
             print("\nMatriz generada recursivamente:")
             llenar_serpiente_diagonal_rec(matriz, (2 * n - 2), 1, 0, 0)
             for fila in matriz:
+                print(fila)
+        elif opcion == "7":
+            m = int(input("Número de filas de la matriz: "))
+            n = int(input("Número de columnas de la matriz: "))
+            matriz = generar_matriz(m, n)
+            matriz_espiral = generar_matriz_espiral(matriz)
+            print("\nMatriz generada en espiral:")
+            for fila in matriz_espiral:
                 print(fila)
         else:
             print("Opción no válida. Intente nuevamente.")
