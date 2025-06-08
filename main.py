@@ -81,6 +81,58 @@ def suma_filas_impares_rec(matriz, fila, col=0, total=0):
                 return suma_filas_impares_rec(matriz, fila, col + 1, total)
 
 
+## Ejercicio 6: Relleno matriz serpiente diagonal inversa
+def llenar_serpiente_diagonal_sec(matriz):
+    n = len(matriz)
+    contador = 1
+
+    for diagonal in range(2 * n - 2, -1, -1):
+        if diagonal >= n - 1:
+            i = diagonal - (n - 1)
+            for j in range(i, n):
+                if diagonal % 2 == 0:
+                    matriz[n - 1 - j + i][j] = contador
+                    contador += 1
+                else:
+                    matriz[j][n - 1 - j + i] = contador
+                    contador += 1
+        else:
+            i = diagonal
+            for j in range(i, -1, -1):
+                if diagonal % 2 != 0:
+                    matriz[i - j][j] = contador
+                    contador += 1
+                else:
+                    matriz[j][i - j] = contador
+                    contador += 1
+
+
+def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
+    if diagonal < 0:
+        return matriz
+    else:
+        if diagonal >= len(matriz) - 1:
+            if i + (diagonal - (len(matriz) - 1)) < len(matriz):
+                if diagonal % 2 == 0:
+                    matriz[len(matriz) - 1 - (diagonal - (len(matriz) - 1) + i) + (diagonal - (len(matriz) - 1))][diagonal - (len(matriz) - 1) + i] = contador
+                    return llenar_serpiente_diagonal_rec(matriz, diagonal, contador + 1, i + 1, j)
+                else:
+                    matriz[diagonal - (len(matriz) - 1) + i][len(matriz) - 1 - (diagonal - (len(matriz) - 1) + i) + (diagonal - (len(matriz) - 1))] = contador
+                    return llenar_serpiente_diagonal_rec(matriz, diagonal, contador + 1, i + 1, j)
+            else:
+                return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
+        else:
+            if j <= diagonal:
+                if diagonal % 2 == 0:
+                    matriz[diagonal - j][j] = contador
+                    return llenar_serpiente_diagonal_rec(matriz, diagonal, contador + 1, i, j + 1)
+                else:
+                    matriz[j][diagonal - j] = contador
+                    return llenar_serpiente_diagonal_rec(matriz, diagonal, contador + 1, i, j + 1)
+            else:
+                return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
+
+
 ## Generación de estructuras de datos
 def generar_arreglo(n):
     return [random.randint(1, 100) for _ in range(n)]
@@ -110,6 +162,7 @@ def menu():
         print("2. Número mayor de un arreglo")
         print("4. Verificar matriz simétrica")
         print("5. Suma de filas impares de matriz")
+        print("6. Relleno matriz serpiente diagonal inversa")
         print("0. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -146,6 +199,17 @@ def menu():
                 print(fila)
             print(f"\nSuma filas impares (secuencial): {suma_filas_impares_sec(matriz)}")
             print(f"Suma filas impares (recursivo): {suma_filas_impares_rec(matriz, len(matriz) - 1, 0, 0)}")
+        elif opcion == "6":
+            n = int(input("Tamaño de la matriz cuadrada: "))
+            matriz = generar_matriz_cuadrada(n)
+            print("\nMatriz generada secuencialmente:")
+            llenar_serpiente_diagonal_sec(matriz)
+            for fila in matriz:
+                print(fila)
+            print("\nMatriz generada recursivamente:")
+            llenar_serpiente_diagonal_rec(matriz, (2 * n - 2), 1, 0, 0)
+            for fila in matriz:
+                print(fila)
         else:
             print("Opción no válida. Intente nuevamente.")
 
