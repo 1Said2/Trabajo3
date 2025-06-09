@@ -164,7 +164,7 @@ def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
                 return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
 
 ## Ejercicio 7: Rellenar la matriz en espiral
-def llenar_matriz_espiral(matriz):
+def llenar_matriz_espiral_secuencial(matriz):
     filas = len(matriz)
     if filas > 0:
         columnas = len(matriz[0])
@@ -194,6 +194,44 @@ def llenar_matriz_espiral(matriz):
             fila_actual = proxima_fila
             col_actual = proxima_col
 
+def llenar_matriz_espiral_recursivo(matriz, fila, col, direccion, numero):
+    if numero > 0:
+        matriz[fila][col] = len(matriz)*len(matriz[0]) - numero + 1
+        if direccion == 0:
+            if col > 0:
+                if matriz[fila][col-1] == 0:
+                    llenar_matriz_espiral_recursivo(matriz, fila, col-1, 0, numero-1)
+                else:
+                    llenar_matriz_espiral_recursivo(matriz, fila-1, col, 1, numero-1)
+            else:
+                llenar_matriz_espiral_recursivo(matriz, fila-1, col, 1, numero-1)
+        else:
+            if direccion == 1:
+                if fila > 0:
+                    if matriz[fila-1][col] == 0:
+                        llenar_matriz_espiral_recursivo(matriz, fila-1, col, 1, numero-1)
+                    else:
+                        llenar_matriz_espiral_recursivo(matriz, fila, col+1, 2, numero-1)
+                else:
+                    llenar_matriz_espiral_recursivo(matriz, fila, col+1, 2, numero-1)
+            else:
+                if direccion == 2:
+                    if col < len(matriz[0])-1:
+                        if matriz[fila][col+1] == 0:
+                            llenar_matriz_espiral_recursivo(matriz, fila, col+1, 2, numero-1)
+                        else:
+                            llenar_matriz_espiral_recursivo(matriz, fila+1, col, 3, numero-1)
+                    else:
+                        llenar_matriz_espiral_recursivo(matriz, fila+1, col, 3, numero-1)
+                else:
+                    if direccion == 3:
+                        if fila < len(matriz)-1:
+                            if matriz[fila+1][col] == 0:
+                                llenar_matriz_espiral_recursivo(matriz, fila+1, col, 3, numero-1)
+                            else:
+                                llenar_matriz_espiral_recursivo(matriz, fila, col-1, 0, numero-1)
+                        else:
+                            llenar_matriz_espiral_recursivo(matriz, fila, col-1, 0, numero-1)
 
 ## Ejercicio 8: Recorrido preorden arbol binario
 def recorrido_preorden_sec(raiz):
@@ -372,12 +410,18 @@ def menu():
             for fila in matriz:
                 print(fila)
         elif opcion == "7":
-            m = int(input("Número de filas de la matriz: "))
-            n = int(input("Número de columnas de la matriz: "))
-            matriz_espiral = generar_matriz(m, n)
-            llenar_matriz_espiral(matriz_espiral)
+            filas = int(input("Número de filas de la matriz: "))
+            columnas = int(input("Número de columnas de la matriz: "))
+            matriz_espiral = generar_matriz(filas, columnas)
+            matriz = generar_matriz(filas, columnas)
+            llenar_matriz_espiral_secuencial(matriz_espiral)
+            llenar_matriz_espiral_recursivo(matriz, filas - 1, columnas - 1, 0, filas * columnas)
+
             print("\nMatriz generada en espiral:")
             for fila in matriz_espiral:
+                print(fila)
+            print("\nMatriz generada en espiral recursivo:")
+            for fila in matriz:
                 print(fila)
         elif opcion == "8":
             arbol = generar_arbol_aleatorio(4)
