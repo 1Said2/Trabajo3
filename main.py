@@ -294,7 +294,7 @@ def generar_matriz(m, n):
     return [[0] * n for _ in range(m)]
 
 
-def generar_arbol_aleatorio(profundidad_maxima, probabilidad_rama=0.7):
+def generar_arbol_aleatorio(profundidad_maxima, probabilidad_rama=1.0):
     if profundidad_maxima == 0 or random.random() > probabilidad_rama:
         return None
 
@@ -432,7 +432,7 @@ def menu():
 
         elif opcion == "9":
             # Generar árbol aleatorio con profundidad máxima 4
-            profundidad = 4
+            profundidad = random.randint(2, 5)
             arbol = generar_arbol_aleatorio(profundidad)
 
             print("Árbol generado (visualización):")
