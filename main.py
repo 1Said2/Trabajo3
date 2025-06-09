@@ -34,6 +34,37 @@ def mayor_recursivo(arr, index, mayor_actual):
         else:
             return mayor_recursivo(arr, index - 1, mayor_actual)
 
+## Ejercicio 3: Suma de dígitos múltiplos de un número en arreglo
+
+def suma_digitos_multiplos_secuencial(arr, multiplo):
+    resultado = []
+    for i in range(len(arr)):
+        suma = 0
+        num_str = str(abs(arr[i]))
+        for j in range(len(num_str)):
+            digito = int(num_str[j])
+            if digito % multiplo == 0 and digito != 0:
+                suma += digito
+        resultado.append(suma)
+    return resultado
+
+def suma_digitos_multiplos_recursivo(arr, multiplo, indice, suma_actual):
+    if indice < 0:
+        return []
+    else:
+        if arr[indice] == 0:
+            return suma_digitos_multiplos_recursivo(arr, multiplo, indice - 1, 0) + [suma_actual]
+        else:
+            if abs(arr[indice]) % 10 % multiplo == 0 and abs(arr[indice]) % 10 != 0:
+                if abs(arr[indice]) // 10 == 0:
+                    return suma_digitos_multiplos_recursivo(arr, multiplo, indice - 1, 0) + [suma_actual + abs(arr[indice]) % 10]
+                else:
+                    return suma_digitos_multiplos_recursivo(arr[:indice] + [abs(arr[indice]) // 10] + arr[indice+1:], multiplo, indice, suma_actual + abs(arr[indice]) % 10)
+            else:
+                if abs(arr[indice]) // 10 == 0:
+                    return suma_digitos_multiplos_recursivo(arr, multiplo, indice - 1, 0) + [suma_actual]
+                else:
+                    return suma_digitos_multiplos_recursivo(arr[:indice] + [abs(arr[indice]) // 10] + arr[indice+1:], multiplo, indice, suma_actual)
 
 ## Ejercicio 4: Verificar matriz simétrica
 def simetrica_secuencial(matriz):
@@ -279,6 +310,7 @@ def menu():
         print("\n=== MENÚ PRINCIPAL ===")
         print("1. Suma de elementos de un arreglo")
         print("2. Número mayor de un arreglo")
+        print("3. Suma de dígitos múltiplos de un número en arreglo")
         print("4. Verificar matriz simétrica")
         print("5. Suma de filas impares de matriz")
         print("6. Relleno matriz serpiente diagonal inversa")
@@ -303,6 +335,13 @@ def menu():
             print(f"\nArreglo generado: {arr}")
             print(f"Mayor secuencial: {mayor_secuencial(arr)}")
             print(f"Mayor recursivo: {mayor_recursivo(arr, len(arr) - 1, arr[-1])}")
+        elif opcion == "3":
+            n = int(input("Tamaño del arreglo: "))
+            multiplo = int(input("Ingrese el número múltiplo: "))
+            arr = generar_arreglo(n)
+            print(f"\nArreglo generado: {arr}")
+            print(f"Suma dígitos múltiplos (secuencial): {suma_digitos_multiplos_secuencial(arr, multiplo)}")
+            print(f"Suma dígitos múltiplos (recursivo): {suma_digitos_multiplos_recursivo(arr, multiplo, len(arr) - 1, 0)}")
         elif opcion == "4":
             n = int(input("Tamaño de la matriz cuadrada: "))
             simetrica = input("¿Generar matriz simétrica? (s/n): ").lower() == 's'
