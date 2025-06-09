@@ -133,41 +133,35 @@ def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
                 return llenar_serpiente_diagonal_rec(matriz, diagonal - 1, contador, 0, 0)
 
 ## Ejercicio 7: Rellenar la matriz en espiral
-def generar_matriz_espiral(matriz):
-    m = len(matriz)     # Filas de la matriz
-    n = len(matriz[0])  # Columnas de la matriz
-    num = 1
-    top, bottom = 0, m - 1
-    left, right = 0, n - 1
+def llenar_matriz_espiral(matriz):
+    filas = len(matriz)
+    if filas > 0:
+        columnas = len(matriz[0])
+    else:
+        columnas = 0
 
-    while num <= m * n:
-        for col in range(right, left - 1, -1):
-            matriz[bottom][col] = num
-            num += 1
-        bottom -= 1
-        if num > m * n:
-            break
+    fila_actual = filas - 1
+    col_actual = columnas - 1
 
-        for row in range(bottom, top - 1, -1):
-            matriz[row][left] = num
-            num += 1
-        left += 1
-        if num > m * n:
-            break
+    direcciones = [(0, -1), (-1, 0), (0, 1), (1, 0)]
+    direccion_actual = 0
 
-        for col in range(left, right + 1):
-            matriz[top][col] = num
-            num += 1
-        top += 1
-        if num > m * n:
-            break
+    for numero in range(1, filas * columnas + 1):
+        matriz[fila_actual][col_actual] = numero
+        df, dc = direcciones[direccion_actual]
+        proxima_fila = fila_actual + df
+        proxima_col = col_actual + dc
+        if (proxima_fila < 0 or proxima_fila >= filas or
+                proxima_col < 0 or proxima_col >= columnas or
+                matriz[proxima_fila][proxima_col] != 0):
 
-        for row in range(top, bottom + 1):
-            matriz[row][right] = num
-            num += 1
-        right -= 1
-
-    return matriz
+            direccion_actual = (direccion_actual + 1) % 4
+            df, dc = direcciones[direccion_actual]
+            fila_actual += df
+            col_actual += dc
+        else:
+            fila_actual = proxima_fila
+            col_actual = proxima_col
 
 
 ## Ejercicio 8: Recorrido preorden arbol binario
@@ -341,8 +335,8 @@ def menu():
         elif opcion == "7":
             m = int(input("Número de filas de la matriz: "))
             n = int(input("Número de columnas de la matriz: "))
-            matriz = generar_matriz(m, n)
-            matriz_espiral = generar_matriz_espiral(matriz)
+            matriz_espiral = generar_matriz(m, n)
+            llenar_matriz_espiral(matriz_espiral)
             print("\nMatriz generada en espiral:")
             for fila in matriz_espiral:
                 print(fila)
