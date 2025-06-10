@@ -234,25 +234,11 @@ def llenar_matriz_espiral_recursivo(matriz, fila, col, direccion, numero):
                             llenar_matriz_espiral_recursivo(matriz, fila, col-1, 0, numero-1)
 
 ## Ejercicio 8: Recorrido preorden arbol binario
-def recorrido_preorden_sec(raiz):
-    if not raiz:
-        return []
-    resultado = []
-    pila = [raiz]
-    while pila:
-        nodo_actual = pila.pop()
-        resultado.append(nodo_actual.valor)
-        if nodo_actual.derecho:
-            pila.append(nodo_actual.derecho)
-        if nodo_actual.izquierdo:
-            pila.append(nodo_actual.izquierdo)
-    return resultado
-
-
 def recorrido_preorden_rec(raiz):
     if not raiz:
         return []
-    return [raiz.valor] + recorrido_preorden_rec(raiz.izquierdo) + recorrido_preorden_rec(raiz.derecho)
+    else:
+        return [raiz.valor] + recorrido_preorden_rec(raiz.izquierdo) + recorrido_preorden_rec(raiz.derecho)
 
 
 ## Ejercicio 9: Contar el número de nodos hoja en un árbol
