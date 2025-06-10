@@ -114,28 +114,46 @@ def suma_filas_impares_rec(matriz, fila, col=0, total=0):
 
 ## Ejercicio 6: Relleno matriz serpiente diagonal inversa
 def llenar_serpiente_diagonal_sec(matriz):
-    n = len(matriz)
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    max_diagonal = filas + columnas - 2
     contador = 1
 
-    for diagonal in range(2 * n - 2, -1, -1):
-        if diagonal >= n - 1:
-            i = diagonal - (n - 1)
-            for j in range(i, n):
-                if diagonal % 2 == 0:
-                    matriz[n - 1 - j + i][j] = contador
-                    contador += 1
-                else:
-                    matriz[j][n - 1 - j + i] = contador
-                    contador += 1
+    for diagonal in range(max_diagonal + 1):
+        # Determinar punto de inicio (fila, columna)
+        if diagonal < filas:
+            start_row = filas - 1 - diagonal
+            start_col = columnas - 1
         else:
-            i = diagonal
-            for j in range(i, -1, -1):
-                if diagonal % 2 != 0:
-                    matriz[i - j][j] = contador
-                    contador += 1
-                else:
-                    matriz[j][i - j] = contador
-                    contador += 1
+            start_row = 0
+            start_col = columnas - 1 - (diagonal - filas + 1)
+
+        # Determinar longitud de la diagonal sin usar min()
+        if diagonal < filas:
+            if diagonal + 1 <= columnas:
+                longitud_diagonal = diagonal + 1
+            else:
+                longitud_diagonal = columnas
+        else:
+            if (filas + columnas - 1 - diagonal) <= columnas:
+                longitud_diagonal = filas + columnas - 1 - diagonal
+            else:
+                longitud_diagonal = columnas
+
+        # Llenar la diagonal en patrón de serpiente
+        for pos_en_diagonal in range(longitud_diagonal):
+            if diagonal % 2 != 0:
+                x = start_row + pos_en_diagonal
+                y = start_col - pos_en_diagonal
+            else:
+                x = start_row + longitud_diagonal - 1 - pos_en_diagonal
+                y = start_col - (longitud_diagonal - 1 - pos_en_diagonal)
+
+            if 0 <= x < filas and 0 <= y < columnas:
+                matriz[x][y] = contador
+                contador += 1
+
+    return matriz
 
 
 def llenar_serpiente_diagonal_rec(matriz, diagonal, contador, i, j):
@@ -382,22 +400,22 @@ def menu():
         elif opcion == "1":
             n = int(input("Tamaño del arreglo: "))
             arr = generar_arreglo(n)
-            print(f"\nArreglo generado: {arr}")
+            print("\nArreglo generado:", *arr)
             print(f"Suma secuencial: {suma_secuencial(arr)}")
             print(f"Suma recursiva: {suma_recursiva(arr, len(arr) - 1)}")
         elif opcion == "2":
             n = int(input("Tamaño del arreglo: "))
             arr = generar_arreglo(n)
-            print(f"\nArreglo generado: {arr}")
+            print("\nArreglo generado:",*arr)
             print(f"Mayor secuencial: {mayor_secuencial(arr)}")
             print(f"Mayor recursivo: {mayor_recursivo(arr, len(arr) - 1, arr[-1])}")
         elif opcion == "3":
             n = int(input("Tamaño del arreglo: "))
             multiplo = int(input("Ingrese el número múltiplo: "))
             arr = generar_arreglo(n)
-            print(f"\nArreglo generado: {arr}")
-            print(f"Suma dígitos múltiplos (secuencial): {suma_digitos_multiplos_secuencial(arr, multiplo)}")
-            print(f"Suma dígitos múltiplos (recursivo): {suma_digitos_multiplos_recursivo(arr, multiplo, len(arr) - 1, 0)}")
+            print("\nArreglo generado:", *arr)
+            print("Suma dígitos múltiplos (secuencial):",*suma_digitos_multiplos_secuencial(arr, multiplo))
+            print("Suma dígitos múltiplos (recursivo):",*suma_digitos_multiplos_recursivo(arr, multiplo, len(arr) - 1, 0))
         elif opcion == "4":
             n = int(input("Tamaño de la matriz cuadrada: "))
             simetrica = input("¿Generar matriz simétrica? (s/n): ").lower() == 's'
@@ -405,7 +423,7 @@ def menu():
 
             print("\nMatriz generada:")
             for fila in matriz:
-                print(fila)
+                print(*fila, sep="\t")
             print(f"\nEs simétrica (secuencial): {simetrica_secuencial(matriz)}")
             print(f"Es simétrica (recursivo): {simetrica_recursiva(matriz, len(matriz) - 1, len(matriz) - 1)}")
         elif opcion == "5":
@@ -413,7 +431,7 @@ def menu():
             matriz = generar_matriz_cuadrada(n)
             print("\nMatriz generada:")
             for fila in matriz:
-                print(fila)
+                print(*fila, sep="\t")
             print(f"\nSuma filas impares (secuencial): {suma_filas_impares_sec(matriz)}")
             print(f"Suma filas impares (recursivo): {suma_filas_impares_rec(matriz, len(matriz) - 1, 0, 0)}")
         elif opcion == "6":
@@ -422,11 +440,11 @@ def menu():
             print("\nMatriz generada secuencialmente:")
             llenar_serpiente_diagonal_sec(matriz)
             for fila in matriz:
-                print(fila)
+                print(*fila, sep="\t")
             print("\nMatriz generada recursivamente:")
             llenar_serpiente_diagonal_rec(matriz, (2 * n - 2), 1, 0, 0)
             for fila in matriz:
-                print(fila)
+                print(*fila, sep="\t")
         elif opcion == "7":
             filas = int(input("Número de filas de la matriz: "))
             columnas = int(input("Número de columnas de la matriz: "))
@@ -437,16 +455,15 @@ def menu():
 
             print("\nMatriz generada en espiral:")
             for fila in matriz_espiral:
-                print(fila)
+                print(*fila, sep="\t")
             print("\nMatriz generada en espiral recursivo:")
             for fila in matriz:
-                print(fila)
+                print(*fila, sep="\t")
         elif opcion == "8":
-            arbol = generar_arbol_aleatorio(4)
+            arbol = generar_arbol_aleatorio(random.randint(2, 5))
             print("Árbol generado (visualización):")
             imprimir_arbol(arbol)
-            print("Recorrido Secuencial:\t" + str(recorrido_preorden_sec(arbol)))
-            print("Recorrido Recursivo:\t" + str(recorrido_preorden_rec(arbol)))
+            print("Recorrido Preorden:\t" + str(recorrido_preorden_rec(arbol)))
 
         elif opcion == "9":
             # Generar árbol aleatorio con profundidad máxima 4
@@ -468,7 +485,7 @@ def menu():
             arbol = generar_arbol_aleatorio(profundidad)
             print("Árbol generado (visualización):")
             imprimir_arbol(arbol)
-            valores = recorrido_preorden_sec(arbol)
+            valores = recorrido_preorden_rec(arbol)
             try:
                 objetivo = int(input("Ingrese el valor del nodo objetivo para buscar el camino: "))
             except ValueError:
