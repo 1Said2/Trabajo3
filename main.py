@@ -342,7 +342,35 @@ def imprimir_arbol(raiz):
     else:
         print("Árbol vacío")
 
-## Menú principal
+def encontrar_camino(raiz, nodo_objetivo, camino):
+    if raiz.valor == nodo_objetivo:
+        camino.append(raiz.valor)
+        return True
+    else:
+        if raiz.izquierdo is not None:
+            if encontrar_camino(raiz.izquierdo, nodo_objetivo, camino):
+                camino.append(raiz.valor)
+                return True
+            else:
+                if raiz.derecho is not None:
+                    if encontrar_camino(raiz.derecho, nodo_objetivo, camino):
+                        camino.append(raiz.valor)
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+        else:
+            if raiz.derecho is not None:
+                if encontrar_camino(raiz.derecho, nodo_objetivo, camino):
+                    camino.append(raiz.valor)
+                    return True
+                else:
+                    return False
+            else:
+                return False
+
+# Menú principal
 def menu():
     while True:
         print("\n=== MENÚ PRINCIPAL ===")
@@ -355,6 +383,7 @@ def menu():
         print("7. Rellenar matriz en espiral")
         print("8. Recorrido preorden de árbol binario")
         print("9. Calcular el número de nodos hoja en un árbol binario")
+        print("10. Encontrar camino a un nodo en árbol binario")
         print("0. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -445,9 +474,27 @@ def menu():
             print(f"\nDetalles del árbol generado:")
             print(f"- Profundidad máxima configurada: {profundidad}")
             print(f"- Nodos hoja encontrados: {hojas}")
+        elif opcion == "10":
+            profundidad = random.randint(3, 5)
+            arbol = generar_arbol_aleatorio(profundidad)
+            print("Árbol generado (visualización):")
+            imprimir_arbol(arbol)
+            valores = recorrido_preorden_sec(arbol)
+            try:
+                objetivo = int(input("Ingrese el valor del nodo objetivo para buscar el camino: "))
+            except ValueError:
+                print("Valor inválido.")
+                continue
+            if objetivo not in valores:
+                print("El valor no se encuentra en el árbol.")
+            else:
+                camino = []
+                if encontrar_camino(arbol, objetivo, camino):
+                    print(f"Camino desde la raíz hasta el nodo {objetivo}: {list(reversed(camino))}")
+                else:
+                    print("No se encontró un camino al nodo objetivo.")
         else:
             print("Opción no válida. Intente nuevamente.")
-
 
 if __name__ == "__main__":
     menu()
