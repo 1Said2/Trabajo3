@@ -258,17 +258,15 @@ def recorrido_preorden_rec(raiz):
     else:
         return [raiz.valor] + recorrido_preorden_rec(raiz.izquierdo) + recorrido_preorden_rec(raiz.derecho)
 
-
 ## Ejercicio 9: Contar el número de nodos hoja en un árbol
 def contar_nodos_hoja_recursivo(raiz):
-    if raiz is None or (raiz.izquierdo is None and raiz.derecho is None):
-        if raiz is None:
-            return 0
-        else:
-            return 1
+    if raiz is None:
+        return 0
     else:
-        return contar_nodos_hoja_recursivo(raiz.izquierdo) + contar_nodos_hoja_recursivo(raiz.derecho)
-
+        if raiz.izquierdo is None and raiz.derecho is None:
+            return 1
+        else:
+            return contar_nodos_hoja_recursivo(raiz.izquierdo) + contar_nodos_hoja_recursivo(raiz.derecho)
 
 ## Clases para el programa
 class Nodo:
